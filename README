@@ -1,0 +1,229 @@
+$Id: README,v 1.26 2004/06/20 21:33:27 wingman Exp $
+
+Readme
+Last revised: December 10, 2003
+     _________________________________________________________________
+
+                                   Readme
+
+
+  Please at least SKIM this document before asking questions. In fact, READ IT
+  if you've never successfully set up an Eggdrop bot before. PLEASE! READ IT!
+
+  Contents
+
+    0. Important notice
+    1. What is Eggdrop?
+    2. How do I get Eggdrop?
+    3. Command line
+    4. Boring legal stuff
+    5. Mailing list
+    6. Documentation
+    7. Obtaining help
+
+     _________________________________________________________________
+
+
+  (0) NOTICE
+
+    Please read this file carefully before trying to set up Eggdrop. Also,
+    make SURE that you select your +n (owner) users wisely! They have 100%
+    access to your bot and account! ONLY GIVE THIS POWER TO SOMEONE YOU
+    TRUST COMPLETELY!!
+    
+    Remember that this is a DEVELOPMENT VERSION. Everything isn't guaranteed
+    to work. Eggdrop 1.9 should *NOT* be used in a production environment.
+
+
+  (1) WHAT IS EGGDROP?
+
+    Eggdrop is the world's most popular Internet Relay Chat (IRC) bot; it is
+    freely distributable under the GNU General Public License (GPL). Eggdrop
+    is a feature rich program designed to be easily used and expanded upon by
+    both novice and advanced IRC users on a variety of hardware and software
+    platforms.
+
+    An IRC bot is a program that sits on an IRC channel and preforms automated
+    tasks while looking just like a normal user on the channel. Some of these
+    functions include protecting the channel from abuse, allowing privileged
+    users to gain op or voice status, logging channel events, providing
+    information, hosting games, etc.
+
+    One of the features that makes Eggdrop stand out from other bots is module
+    and Tcl scripting support. With scripts and modules, you can make the bot
+    preform almost any task you want. They can do anything from preventing
+    floods to greeting users and banning advertisers from channels.
+
+    You can also link multiple Eggdrop bots together to form a botnet. This
+    can allow bots to op each other securely, control floods efficiently, and
+    even link channels across multiple IRC networks. It also allows the
+    Eggdrops share user lists, ban lists, exempt/invite lists, and ignore
+    lists with other bots if userfile sharing is enabled. This allows users
+    to have the same access on every bot on your botnet. It also allows the
+    bots to distribute tasks such as opping and banning users. See doc/BOTNET
+    for information on setting up a botnet.
+
+    Eggdrop is always being improved and adjusted because there are bugs to
+    be fixed and features to be added (if the users demand them, and they make
+    actually sense). In fact, it existed for several years as v0.7 - v0.9
+    before finally going 1.0. This version of Eggdrop is part of the 1.6 tree.
+    A valiant effort has been made to chase down and destroy bugs.
+
+    This README file contains information about how to get Eggdrop, command
+    line options for Eggdrop, what you may need to do when upgrading from
+    older versions, a list of frequently asked questions, how to set up a
+    crontab, some boring legal stuff, info about the mailing list (a great
+    place to ask questions, and a good place to report bugs, too), some basics
+    about CVS usage, and some channels where you might get help with Eggdrop.
+
+
+  (2) HOW TO GET EGGDROP
+
+    You can obtain the LATEST version of Eggdrop 1.9 by using CVS. CVS means
+    'Concurrent Versions System' and is a tool for developers to always keep
+    source code up to date. Try 'man cvs' on your shell for more information
+    about CVS.
+
+    To obtain Eggdrop 1.9 via CVS, do as follows:
+
+      1. Log into your shell.
+
+      2. Type: 'export
+         CVSROOT=:pserver:anonymous@cvs.eggheads.org:/usr/local/cvsroot'.
+
+      3. Type 'cvs login'.
+
+      4. Press <enter> when prompted for a password.
+
+      5. In your home dir, type 'cvs checkout eggdrop1.9'
+
+      6. In ~/eggdrop1.9, you should have a copy of the latest CVS version
+         of Eggdrop 1.9.
+
+    Notes:
+
+      o You can 'cvs logout', but you don't need to.
+
+      o You don't need to go through this whole process every time. If you
+        want to get a CVS version of Eggdrop at a later time, you can just
+        'cd ~/eggdrop1.9' and type 'cvs update -CdAP'.
+
+      o If you experience errors when using 'export', you might be using tclsh
+        as a shell. If so, try using the command 'setenv' instead of 'export':
+
+          setenv CVSROOT :pserver:anonymous@cvs.eggheads.org:/usr/local/cvsroot
+
+
+  (3) COMMAND LINE
+
+    Eggdrop has some command-line options -- not many, because most things
+    should be defined through the config file. However, sometimes you may
+    want to start up the bot in a different mode, and the command-line
+    options let you do that. Basically, the command line for Eggdrop is:
+
+      % eggdrop [options] [config-file]
+
+    The options available are:
+
+      -n: Don't background. Normally, Eggdrop will move itself into the
+          background when you start it up, meaning you'll get another shell
+          prompt, and you can do other things while the bot is running. With
+          -n, you won't return to the shell prompt until the bot exits (which
+          won't normally happen until it's killed). By default, -n will send
+          all log entries to the console.
+
+      -nt: Don't background, use terminal. This is just like -n, except that
+           instead of seeing log entries, your console will simulate a DCC
+           chat with the bot.
+
+      -nc: Don't background, show channel info. This is just like -n, except
+           that instead of seeing log entries, every 10 seconds your screen
+           will clear and you will see the current channel status, sort of
+           like "top".
+
+      -m: Create userfile. If you don't have a userfile, this will make Eggdrop
+          create one and give owner status to the first person that introduces
+          himself or herself to it. You'll need to do this when you first set
+          up your bot.
+
+      -v: Show version info, then quit.
+
+    Most people never use any of the options except -m, and you usually only
+    need to use that once.
+
+
+  (4) BORING LEGAL STUFF
+
+    The Eggdrop bot is copyright (C) by Robey Pointer. As of January, 1997,
+    Eggdrop is distributed according to the GNU General Public License. There
+    should be a copy of this license in the file 'COPYING'. If not, write to
+    the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+    As of eggdrop1.3.28, all changes made by the Eggheads development team to
+    the Eggdrop source code and any related files are copyright (C) by
+    Eggheads. The source code will still be distributed according to the GNU
+    General Public License as Robey Pointer did in the past.
+
+    Releases previous to 1.0m were made using a different licensing scheme.
+    You may, at your option, use the GNU General Public License on those
+    versions (instead of the license packaged with them) with my blessing.
+    For any versions bearing a copyright date of 1997 or later, you have
+    no choice -- you must use the GNU General Public License.
+
+    The files "match.c", "net.c", and "blowfish.c" are exempt from the above
+    restrictions. "match.c" is original code by Chris Fuller (email:
+    crf@cfox.bchs.uh.edu) and has been placed by him into the public domain.
+    "net.c" is by me, and I [who?] also choose to place it in the public
+    domain. "blowfish.c" is by various sources and is in the public domain
+    as well. All 3 files contain useful functions that could easily be
+    ported to other applications.
+
+    There is no warranty, implied or whatever. You use this software at your
+    own risk, no matter what purpose you put it to.
+
+
+  (5) MAILING LIST
+
+    If you are interested in Eggdrop 1.9, and/or the development of Eggdrop,
+    the eggdev@eggheads.org mailing list focuses on these topics.
+
+    To subscribe to the eggdev mailing list, send an e-mail to wcc@eggheads.org
+    explaining why you would like to be a part of the list. Then visit the
+    following url to subscribe to the list:
+
+      http://scrambled.eggheads.org/mailman/listinfo/eggdev
+
+    NOTE: All subscribe requests not accompanied by an e-mail to
+    wcc@eggheads.org WILL be rejected.
+
+    ### DO NOT SEND ROBEY EMAIL ABOUT EGGDROP! ###
+
+    Robey is no longer developing the Eggdrop code, so don't bother e-mailing
+    him. If you have a serious problem, email the eggheads mailing list and
+    it will get to the coders.
+
+    Please, before posting to this list, see what things are like. When you do
+    post, read over your post for readability, spelling, and grammar mistakes.
+
+    DO NOT SEND HTML E-MAILS TO ANY OF THE EGGHEADS.ORG MAILING LISTS. ANYONE
+    CAUGHT SENDING HTML E-MAILS TO ONE OF THESE LISTS WILL BE REMOVED
+    IMMEDIATELY!
+
+
+  (6) DOCUMENTATION
+
+    We're trying to keep the documentation up to date. If you feel that
+    anything is missing here or that anything should be added, etc, please
+    email docteam@eggheads.org about it. Thank you.
+
+
+  (7) OBTAINING HELP
+
+    See 'MAILING LIST' (5). IRC support is NOT available for Eggdrop 1.9 at
+    this time.
+
+  ________________________________________________________________________
+
+Copyright (C) 1997 Robey Pointer
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eggheads Development Team
+ 

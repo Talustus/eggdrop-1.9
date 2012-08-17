@@ -1,0 +1,23 @@
+$Id: CONTENTS,v 1.11 2004/06/20 21:33:28 wingman Exp $
+
+Directory Contents - scripts/
+Last revised: December 16, 2003
+     _________________________________________________________________
+
+                       Directory Contents - scripts/
+
+  alltools.tcl
+    Provides utility functions to Tcl scripters.
+
+  autobotchk
+    Automatically generates botchk files automatically. Not currently '1.9
+    compatable'.
+
+  botchk
+    Script used to start the bot from crond.
+
+  compat.tcl
+    1.6 Tcl script compatability.
+    ________________________________________________________________________
+
+  Copyright (C) 2003, 2004 Eggheads Development Team

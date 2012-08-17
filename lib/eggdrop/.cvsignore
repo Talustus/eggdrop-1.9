@@ -1,0 +1,13 @@
+Makefile
+Makefile.in
+libeggdrop.la
+*.o
+*.lo
+*.obj
+*.loT
+*.a
+*.la
+*.so
+*.dll
+.deps
+.libs

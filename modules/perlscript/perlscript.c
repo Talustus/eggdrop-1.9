@@ -1,0 +1,545 @@
+/* perlscript.c: perl scripting support
+ *
+ * Copyright (C) 2001, 2002, 2003, 2004 Eggheads Development Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#ifndef lint
+static const char rcsid[] = "$Id: perlscript.c,v 1.33 2007/04/14 15:21:13 sven Exp $";
+#endif
+
+#ifdef DEBUG
+#  undef DEBUG
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <EXTERN.h>
+#include <perl.h>
+#include <XSUB.h>
+#undef _
+#include <eggdrop/eggdrop.h>
+
+static PerlInterpreter *ginterp; /* Our global interpreter. */
+
+static XS(my_command_handler);
+static SV *c_to_perl_var(script_var_t *v);
+static int perl_to_c_var(SV *sv, script_var_t *var, int type);
+static int my_perl_cb_delete(event_owner_t *owner, void *me);
+
+static int my_load_script(void *ignore, char *fname);
+static int my_link_var(void *ignore, script_linked_var_t *linked_var);
+static int my_unlink_var(void *ignore, script_linked_var_t *linked_var);
+static int my_create_command(void *ignore, script_raw_command_t *info);
+static int my_delete_command(void *ignore, script_raw_command_t *info);
+static int my_get_arg(void *ignore, script_args_t *args, int num, script_var_t *var, int type);
+
+script_module_t my_script_interface = {
+	"Perl", NULL,
+	my_load_script,
+	my_link_var, my_unlink_var,
+	my_create_command, my_delete_command,
+	my_get_arg
+};
+
+event_owner_t perl_owner = {
+	"perlscript", 0,
+	0, 0,
+	my_perl_cb_delete
+};
+
+typedef struct {
+	SV **sp;
+	SV **mark;
+	I32 ax;
+	I32 items;
+} my_args_data_t;
+
+/* Functions from mod_iface.c */
+extern int log_error(char *msg);
+ 
+static int my_load_script(void *ignore, char *fname)
+{
+	FILE *fp;
+	char *data;
+	int size, len;
+
+	/* Check the filename and make sure it ends in .pl */
+	len = strlen(fname);
+	if (len < 3 || fname[len-1] != 'l' || fname[len-2] != 'p' || fname[len-3] != '.') {
+		/* Nope, not ours. */
+		return(0);
+	}
+
+	fp = fopen(fname, "r");
+	if (!fp) return (0);
+	fseek(fp, 0, SEEK_END);
+	size = ftell(fp);
+	data = (char *)malloc(size + 1);
+	fseek(fp, 0, SEEK_SET);
+	fread(data, size, 1, fp);
+	data[size] = 0;
+	fclose(fp);
+	eval_pv(data, TRUE);
+	if (SvTRUE(ERRSV)) {
+		char *msg;
+		int len;
+
+		msg = SvPV(ERRSV, len);
+		log_error(msg);
+	}
+	free(data);
+	return(0);
+}
+
+static void set_linked_var(script_linked_var_t *linked_var, SV *sv, script_var_t *val)
+{
+	SV *newsv;
+	script_var_t var;
+
+	if (!val || !val->type) {
+		var.type = linked_var->type & SCRIPT_TYPE_MASK;
+		var.len = -1;
+		var.value = *(void **)linked_var->value;
+		val = &var;
+	}
+
+	newsv = c_to_perl_var(val);
+	sv_setsv(sv, newsv);
+	SvREFCNT_dec(newsv);
+}
+
+static int linked_var_get(pTHX_ SV *sv, MAGIC *mg)
+{
+	script_linked_var_t *linked_var = (script_linked_var_t *)mg->mg_ptr;
+
+	if (linked_var->callbacks && linked_var->callbacks->on_read) {
+		script_var_t newvalue = {0};
+		int r = (linked_var->callbacks->on_read)(linked_var, &newvalue);
+		if (r) return(r);
+		set_linked_var(linked_var, sv, &newvalue);
+	}
+	else set_linked_var(linked_var, sv, NULL);
+	return(0);
+}
+
+static int linked_var_set(pTHX_ SV *sv, MAGIC *mg)
+{
+	script_linked_var_t *linked_var = (script_linked_var_t *)mg->mg_ptr;
+	script_var_t newvalue = {0};
+
+	perl_to_c_var(sv, &newvalue, linked_var->type);
+	script_linked_var_on_write(linked_var, &newvalue);
+	return(0);
+}
+
+/* This function creates the Perl <-> C variable linkage for reads/writes. */
+static int my_link_var(void *ignore, script_linked_var_t *linked_var)
+{
+	MAGIC *mg;
+	SV *sv;
+	char *name;
+
+	/* Figure out the perl name of the variable. */
+	if (linked_var->class && strlen(linked_var->class)) name = egg_mprintf("%s::%s", linked_var->class, linked_var->name);
+	else name = strdup(linked_var->name);
+
+	/* Get a pointer to the sv, creating it if necessary. */
+	sv = get_sv(name, TRUE);
+	free(name);
+
+	/* Set the initial value before we do our magic. */
+	set_linked_var(linked_var, sv, NULL);
+
+	/* Create the magic virtual table, which hooks in our callbacks.
+		We put a pointer to linked_var as the name field, with a length
+		of -1, which tells perl to just store the pointer. Then we can
+		use it later to know which variable is being read/written. */
+	sv_magic(sv, NULL, 'U', (char *)linked_var, sizeof(*linked_var));
+
+	/* This part is based on code generated by SWIG. */
+	mg = mg_find(sv, 'U');
+	mg->mg_virtual = (MGVTBL *)calloc(1, sizeof(MGVTBL));
+	mg->mg_virtual->svt_get = linked_var_get;
+	mg->mg_virtual->svt_set = linked_var_set;
+
+	return(0);
+}
+
+static int my_unlink_var(void *ignore, script_linked_var_t *linked_var)
+{
+	MAGIC *mg;
+	SV *sv;
+	char *name;
+
+	/* Figure out the perl name of the variable. */
+	if (linked_var->class && strlen(linked_var->class)) name = egg_mprintf("%s::%s", linked_var->class, linked_var->name);
+	else name = strdup(linked_var->name);
+
+	/* Get a pointer to the sv, creating it if necessary. */
+	sv = get_sv(name, FALSE);
+	free(name);
+
+	if (!sv) return(0);
+
+	mg = mg_find(sv, 'U');
+	free(mg->mg_virtual);
+	mg->mg_virtual = NULL;
+
+	mg_free(sv);
+	mg_clear(sv);
+	SvREFCNT_dec(sv);
+
+	return(0);
+}
+
+static int my_perl_callbacker(script_callback_t *me, ...)
+{
+	int retval, i, n, count;
+	script_var_t var;
+	SV *cmd, *arg;
+	va_list va;
+	dSP;
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+
+	if (me->syntax) n = strlen(me->syntax);
+	else n = 0;
+	va_start(va, me);
+	for (i = 0; i < n; i++) {
+		var.type = me->syntax[i];
+		if (var.type == SCRIPT_INTEGER || var.type == SCRIPT_UNSIGNED) var.value = (void *) (va_arg(va, int));
+		else var.value = va_arg(va, void *);
+		var.len = -1;
+		arg = c_to_perl_var(&var);
+		XPUSHs(sv_2mortal(arg));
+	}
+	va_end(va);
+	PUTBACK;
+
+	cmd = me->callback_data;
+	SvREFCNT_inc(cmd);
+
+	count = call_sv(cmd, G_EVAL|G_SCALAR);
+	SvREFCNT_dec(cmd);
+
+	SPAGAIN;
+
+	if (SvTRUE(ERRSV)) {
+		char *msg;
+		int len;
+
+		msg = SvPV(ERRSV, len);
+		retval = POPi;
+		log_error(msg);
+	}
+	else if (count > 0) {
+		retval = POPi;
+	}
+	else retval = 0;
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	return(retval);
+}
+
+static int my_perl_cb_delete(event_owner_t *owner, void *data)
+{
+	script_callback_t *me = data;
+
+	if (me->syntax) free(me->syntax);
+	if (me->name) free(me->name);
+	sv_2mortal((SV *)me->callback_data);
+	SvREFCNT_dec((SV *)me->callback_data);
+	free(me);
+	return(0);
+}
+
+static int my_create_command(void *ignore, script_raw_command_t *info)
+{
+	char *cmdname;
+	CV *cv;
+
+	if (info->class && strlen(info->class)) {
+		cmdname = egg_mprintf("%s_%s", info->class, info->name);
+	}
+	else {
+		cmdname = strdup(info->name);
+	}
+	cv = newXS(cmdname, my_command_handler, "eggdrop");
+	XSANY.any_ptr = info;
+	free(cmdname);
+
+	return(0);
+}
+
+static int my_delete_command(void *ignore, script_raw_command_t *info)
+{
+	/* Not sure how to delete CV's in perl yet. */
+	return(0);
+}
+
+static SV *c_to_perl_var(script_var_t *v)
+{
+	SV *result;
+
+	if (v->type & SCRIPT_ARRAY) {
+		AV *array;
+		SV *element;
+		int i;
+
+		array = newAV();
+		if ((v->type & SCRIPT_TYPE_MASK) == SCRIPT_VAR) {
+			script_var_t **v_list;
+
+			v_list = (script_var_t **)v->value;
+			for (i = 0; i < v->len; i++) {
+				element = c_to_perl_var(v_list[i]);
+				av_push(array, element);
+			}
+		}
+		else {
+			script_var_t v_sub;
+			void **values;
+
+			v_sub.type = v->type & (~SCRIPT_ARRAY);
+			values = (void **)v->value;
+			for (i = 0; i < v->len; i++) {
+				v_sub.value = values[i];
+				v_sub.len = -1;
+				element = c_to_perl_var(&v_sub);
+				av_push(array, element);
+			}
+		}
+		if (v->type & SCRIPT_FREE) free(v->value);
+		if (v->type & SCRIPT_FREE_VAR) free(v);
+		result = newRV_noinc((SV *)array);
+		return(result);
+	}
+
+	switch (v->type & SCRIPT_TYPE_MASK) {
+		case SCRIPT_INTEGER:
+		case SCRIPT_UNSIGNED:
+			result = newSViv((int) v->value);
+			break;
+		case SCRIPT_STRING: {
+			char *str = v->value;
+
+			if (!str) str = "";
+			if (v->len == -1) v->len = strlen(str);
+			result = newSVpv(str, v->len);
+			if (v->value && v->type & SCRIPT_FREE) free(v->value);
+			break;
+		}
+		case SCRIPT_BYTES: {
+			byte_array_t *bytes = v->value;
+
+			result = newSVpv(bytes->bytes, bytes->len);
+			if (bytes->do_free) free(bytes->bytes);
+			if (v->type & SCRIPT_FREE) free(bytes);
+			break;
+		}
+		case SCRIPT_POINTER: {
+			char str[32];
+			int str_len;
+
+			sprintf(str, "#%u", (unsigned int) v->value);
+			str_len = strlen(str);
+			result = newSVpv(str, str_len);
+			break;
+		}
+		case SCRIPT_USER: {
+			char *handle;
+			int str_len;
+			user_t *u = v->value;
+
+			handle = u->handle;
+
+			str_len = strlen(handle);
+			result = newSVpv(handle, str_len);
+			break;
+		}
+		case SCRIPT_PARTIER: {
+			partymember_t *p = v->value;
+
+			if (p) result = newSVpv(p->full_id_name, strlen(p->full_id_name));
+			else result = newSVpv("*", 1);
+			break;
+		}
+		default:
+			result = &PL_sv_undef;
+	}
+	return(result);
+}
+
+static int perl_to_c_var(SV *sv, script_var_t *var, int type)
+{
+	int len;
+
+	var->type = type;
+	var->len = -1;
+	var->value = NULL;
+
+	switch (type) {
+		case SCRIPT_BYTES: /* Byte-array. */
+		case SCRIPT_STRING: { /* String. */
+			var->value = SvPV(sv, len);
+			break;
+		}
+		case SCRIPT_UNSIGNED:
+		case SCRIPT_INTEGER: { /* Integer. */
+			var->value = (void *)SvIV(sv);
+			break;
+		}
+		case SCRIPT_CALLBACK: { /* Callback. */
+			script_callback_t *cback;
+			char *name;
+
+			cback = (script_callback_t *)calloc(1, sizeof(*cback));
+			cback->callback = (Function) my_perl_callbacker;
+			name = SvPV(sv, len);
+			cback->name = strdup(name);
+			cback->callback_data = newSVsv(sv);
+			cback->owner = &perl_owner;
+
+			var->value = cback;
+			break;
+		}
+		case SCRIPT_PARTIER: {
+			var->value = partymember_lookup(SvPV(sv, len), NULL, -1);
+			break;
+		}
+		case SCRIPT_USER: { /* User. */
+			user_t *u;
+			char *handle;
+
+			handle = SvPV(sv, len);
+			if (handle) u = user_lookup_by_handle(handle);
+			else u = NULL;
+			var->value = u;
+			break;
+		}
+		default:
+			return(1); /* Error */
+	}
+	return(0); /* No error */
+}
+
+static XS(my_command_handler)
+{
+	dXSARGS;
+
+	/* Now we have an "items" variable for number of args and also an XSANY.any_ptr variable for client data. This isn't what you would call a "well documented" feature of perl heh. */
+
+	script_raw_command_t *cmd = (script_raw_command_t *) XSANY.any_ptr;
+	script_var_t retval;
+	SV *result = NULL;
+	script_args_t args;
+	my_args_data_t argdata;
+
+	argdata.mark = mark;
+	argdata.sp = sp;
+	argdata.ax = ax;
+	argdata.items = items;
+	args.module = &my_script_interface;
+	args.client_data = &argdata;
+	args.len = items;
+
+	retval.type = 0;
+	retval.value = NULL;
+	retval.len = -1;
+
+	cmd->callback(cmd->client_data, &args, &retval);
+
+	/* No error exceptions right now. */
+	/* err = retval.type & SCRIPT_ERROR; */
+	result = c_to_perl_var(&retval);
+
+	if (result) {
+		XSprePUSH;
+		PUSHs(result);
+		XSRETURN(1);
+	}
+	else {
+		XSRETURN_EMPTY;
+	}
+}
+
+static int my_get_arg(void *ignore, script_args_t *args, int num, script_var_t *var, int type)
+{
+	my_args_data_t *argdata;
+	register SV **sp;
+	register SV **mark;
+	I32 ax;
+	I32 items;
+
+	argdata = (my_args_data_t *)args->client_data;
+	sp = argdata->sp;
+	mark = argdata->mark;
+	ax = argdata->ax;
+	items = argdata->items;
+
+	if (num >= items) return(-1);
+
+	return perl_to_c_var(ST(num), var, type);
+}
+
+char *real_perl_cmd(char *text)
+{
+	SV *result;
+	char *msg, *retval;
+	int len;
+
+	result = eval_pv(text, FALSE);
+	if (SvTRUE(ERRSV)) {
+		msg = SvPV(ERRSV, len);
+		retval = egg_mprintf("Perl error: %s", msg);
+	}
+	else {
+		msg = SvPV(result, len);
+		retval = egg_mprintf("Perl result: %s\n", msg);
+	}
+
+	return(retval);
+}
+
+static void init_xs_stuff()
+{
+	extern void boot_DynaLoader();
+	newXS("DynaLoader::boot_DynaLoader", boot_DynaLoader, "eggdrop");
+}
+
+int perlscript_init()
+{
+	char *embedding[] = {"", "-e", "0"};
+
+	ginterp = perl_alloc();
+	perl_construct(ginterp);
+	perl_parse(ginterp, init_xs_stuff, 3, embedding, NULL);
+	return(0);
+}
+
+int perlscript_destroy()
+{
+	PL_perl_destruct_level = 1;
+	perl_destruct(ginterp);
+	perl_free(ginterp);
+	return(0);
+}

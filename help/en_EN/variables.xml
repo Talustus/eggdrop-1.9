@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<variables module="core">
+
+	<section name="Common">
+		<variable name="botname" type="string" path="botname" flags="n">
+			<default>Lamestbot</default>
+			<description>
+				Current bot name.
+			</description>
+		</variable>	
+		
+		<variable name="userfile" type="string" path="userfile" flags="n">
+			<default>users.xml</default>
+			<description>
+				Filename of our userlist.
+			</description>
+		</variable>
+		
+		<variable name="autoload" type="list" path="autoload">
+			<default>
+			<![CDATA[
+				<module>blowfish</module>
+				<module>script</module>
+				<module>telnetparty</module>
+				<!-- <script>example.tcl</script> -->
+				<!-- <script>example.js</script> -->				
+			]]>
+			</default>
+			<description>
+				List of module or script which are automatically loaded on startup.
+			</description>
+		</variable>
+		
+		<variable name="owner" type="string" path="owner">
+			<default>MrLame, MrsLame</default>
+			<description>
+				The owner of the bot gets special privileges and protection. You can
+				specify multiple owners using a comma separated list, e.g.
+				"owner1, owner2, owner3".
+			</description>
+		</variable>
+
+		<variable name="admin" type="string" path="admin">
+			<default>Mr. Lame</default>
+			<description>
+				This setting defines which contact person should be shown in .status,
+				/msg help, and other places. You really should include this information.
+			</description>
+		</variable>
+	</section>
+	
+</variables>

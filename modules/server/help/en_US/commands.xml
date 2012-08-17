@@ -1,0 +1,424 @@
+<helpfile>
+	<section>commands</section>
+	<help>
+		<name>+server</name>
+		<summary>add a new server to the server list</summary>
+		<args>
+			<arg>
+				<name>hostname</name>
+				<desc>the host (or ip address) of the new server</desc>
+			</arg>
+			<arg>
+				<name>port</name>
+				<optional>1</optional>
+				<desc>the port of the new server</desc>
+			</arg>
+			<arg>
+				<name>pass</name>
+				<optional>1</optional>
+				<desc>the password to use for the new server</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The +server command adds a new server to the server list according</line>
+<line>to the given arguments. The only required argument, hostname,</line>
+<line>specifies the host or ip address that the bot will try to connect</line>
+<line>to. If no value for port is given, the default port (set in the</line>
+<line>config file) will be used. If no value for pass is given, then</line>
+<line>the bot will not attempt to send any password when it connects</line>
+<line>to the server.</line>
+<line/>
+<line>Note that if you want to specify a password, you must also specify</line>
+<line>a port, since the order of arguments is important.</line>
+		</desc>
+		<seealso>
+			<see>-server</see>
+			<see>servers</see>
+			<see>jump</see>
+		</seealso>
+	</help>
+	<help>
+		<name>-server</name>
+		<summary>remove a server from the server list</summary>
+		<args>
+			<arg>
+				<name>hostname</name>
+				<desc>the host (or ip address) of the server to remove</desc>
+			</arg>
+			<arg>
+				<name>port</name>
+				<optional>1</optional>
+				<desc>the port of the server to remove</desc>
+			</arg>
+			<arg>
+				<name>pass</name>
+				<optional>1</optional>
+				<desc>the password of the server to remove</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The -server command removes a server from the server list according</line>
+<line>to the given arguments. The only required argument, hostname,</line>
+<line>specifies the host or ip address of the server to remove. In the</line>
+<line>event that more than one server uses the same hostname, you can</line>
+<line>narrow down the choices by specifying the target server's port and</line>
+<line>even password.</line>
+<line/>
+<line>If more than one server matches the given criteria, the first match</line>
+<line>will be the one deleted.</line>
+		</desc>
+		<seealso>
+			<see>+server</see>
+			<see>servers</see>
+			<see>jump</see>
+		</seealso>
+	</help>
+	<help>
+		<name>jump</name>
+		<summary>connect to a new server</summary>
+		<args>
+			<arg>
+				<name>hostname</name>
+				<optional>1</optional>
+				<desc>the host (or ip address) of the server to jump to</desc>
+			</arg>
+			<arg>
+				<name>port</name>
+				<optional>1</optional>
+				<desc>the port of the server to jump to</desc>
+			</arg>
+			<arg>
+				<name>pass</name>
+				<optional>1</optional>
+				<desc>the password of the server to jump to</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The jump command disconnects from the current server (if connected)</line>
+<line>and begins a new connection. If no server is specified, then the</line>
+<line>bot will jump to the next position on the server list. If a server</line>
+<line>is specified, the bot will search for the first matching server on</line>
+<line>the server list and connect to it. If the server is not found, a</line>
+<line>new entry is created and the bot begins connecting to it.</line>
+		</desc>
+		<seealso>
+			<see>+server</see>
+			<see>-server</see>
+			<see>servers</see>
+		</seealso>
+	</help>
+	<help>
+		<name>servers</name>
+		<summary>displays the current server list</summary>
+		<desc>
+<line>The servers command displays the list of servers known to the bot.</line>
+		</desc>
+		<seealso>
+			<see>+server</see>
+			<see>-server</see>
+			<see>jump</see>
+		</seealso>
+	</help>
+	<help>
+		<name>dump</name>
+		<summary>send raw text to the server</summary>
+		<args>
+			<arg>
+				<name>text</name>
+				<desc>the text to send</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The dump command sends raw text to the server. The only</line>
+			<line>change is that a CRLF (\r\n) is added to the end of the line.</line>
+		</desc>
+	</help>
+	<help>
+		<name>+chan</name>
+		<summary>add a static channel to the bot</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<desc>channel to add</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The +chan command adds a static channel to the bot.</line>
+			<line>A static channel is a channel that the bot saves information about</line>
+			<line>and remembers even if the bot is restarted at another time.</line>
+			<line>Static channels are joined automatically unless you set the +inactive</line>
+			<line>flag on the channel.</line>
+			<line></line>
+			<line>When you add static channels, don't forget to use the chansave command</line>
+			<line>to force the bot to rewrite the channel file. Not doing so</line>
+			<line>risks losing the new information if the bot is restarted before</line>
+			<line>the channel file is saved automatically.</line>
+		</desc>
+		<seealso>
+			<see>-chan</see>
+			<see>chanset</see>
+			<see>chaninfo</see>
+			<see>chansave</see>
+		</seealso>
+	</help>
+	<help>
+		<name>-chan</name>
+		<summary>removes a static channel from the bot</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<desc>channel to remove</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text of the action message</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends an action to either a nick or a channel.</line>
+			<line>It is like typing /me blah blah blah in mIRC or X-Chat.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>msg</see>
+		</seealso>
+	</help>
+	<help>
+		<name>act</name>
+		<summary>send an ACTION ctcp to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send action to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text of the action message</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends an action to either a nick or a channel.</line>
+			<line>It is like typing /me blah blah blah in mIRC or X-Chat.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>msg</see>
+		</seealso>
+	</help>
+	<help>
+		<name>act</name>
+		<summary>send an ACTION ctcp to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send action to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text of the action message</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends an action to either a nick or a channel.</line>
+			<line>It is like typing /me blah blah blah in mIRC or X-Chat.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>msg</see>
+		</seealso>
+	</help>
+	<help>
+		<name>act</name>
+		<summary>send an ACTION ctcp to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send action to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text of the action message</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends an action to either a nick or a channel.</line>
+			<line>It is like typing /me blah blah blah in mIRC or X-Chat.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>msg</see>
+		</seealso>
+	</help>
+	<help>
+		<name>op</name>
+		<summary>give ops to a nick on a channel</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<optional>1</optional>
+				<desc>channel to give ops on, or partyline channel if omitted</desc>
+			</arg>
+			<arg>
+				<name>nick</name>
+				<desc>nick to give ops to</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The op command gives ops (+o) to the specified nick. If a channel</line>
+<line>is not specified, the current partyline channel name is used.</line>
+		</desc>
+		<seealso>
+			<see>deop</see>
+			<see>halfop</see>
+			<see>dehalfop</see>
+			<see>voice</see>
+			<see>devoice</see>
+		</seealso>
+	</help>
+	<help>
+		<name>deop</name>
+		<summary>take ops from a nick on a channel</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<optional>1</optional>
+				<desc>channel to remove ops on, or partyline channel if omitted</desc>
+			</arg>
+			<arg>
+				<name>nick</name>
+				<desc>nick to take ops from</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The deop command takes ops (-o) from the specified nick. If a</line>
+<line>channel is not specified, the current partyline channel name is</line>
+<line>used.</line>
+		</desc>
+		<seealso>
+			<see>op</see>
+			<see>halfop</see>
+			<see>dehalfop</see>
+			<see>voice</see>
+			<see>devoice</see>
+		</seealso>
+	</help>
+	<help>
+		<name>voice</name>
+		<summary>give voice to a nick on a channel</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<optional>1</optional>
+				<desc>channel to give voice on, or partyline channel if omitted</desc>
+			</arg>
+			<arg>
+				<name>nick</name>
+				<desc>nick to give voice to</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The voice command gives voice (+v) to the specified nick. If a</line>
+<line>channel is not specified, the current partyline channel name is</line>
+<line>used.</line>
+		</desc>
+		<seealso>
+			<see>op</see>
+			<see>deop</see>
+			<see>halfop</see>
+			<see>dehalfop</see>
+			<see>devoice</see>
+		</seealso>
+	</help>
+	<help>
+		<name>devoice</name>
+		<summary>take voice from a nick on a channel</summary>
+		<args>
+			<arg>
+				<name>channel</name>
+				<optional>1</optional>
+				<desc>channel to take voice on, or partyline channel if omitted</desc>
+			</arg>
+			<arg>
+				<name>nick</name>
+				<desc>nick to take voice to</desc>
+			</arg>
+		</args>
+		<desc>
+<line>The devoice command takes voice (-v) from the specified nick. If a</line>
+<line>channel is not specified, the current partyline channel name is</line>
+<line>used.</line>
+		</desc>
+		<seealso>
+			<see>op</see>
+			<see>deop</see>
+			<see>halfop</see>
+			<see>dehalfop</see>
+			<see>voice</see>
+		</seealso>
+	</help>
+	<help>
+		<name>msg</name>
+		<summary>send a privmsg to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send privmsg to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text to send</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The msg command sends a privmsg to either a nick or a channel.</line>
+			<line>It is a synonym for the say command.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>act</see>
+		</seealso>
+	</help>
+	<help>
+		<name>say</name>
+		<summary>send a privmsg to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send privmsg to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text to send</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends a privmsg to either a nick or a channel.</line>
+			<line>It is a synonym for the msg command.</line>
+		</desc>
+		<seealso>
+			<see>msg</see>
+			<see>act</see>
+		</seealso>
+	</help>
+	<help>
+		<name>act</name>
+		<summary>send an ACTION ctcp to a nick (or channel)</summary>
+		<args>
+			<arg>
+				<name>dest</name>
+				<desc>nick or channel to send action to</desc>
+			</arg>
+			<arg>
+				<name>text</name>
+				<desc>the text of the action message</desc>
+			</arg>
+		</args>
+		<desc>
+			<line>The say command sends an action to either a nick or a channel.</line>
+			<line>It is like typing /me blah blah blah in mIRC or X-Chat.</line>
+		</desc>
+		<seealso>
+			<see>say</see>
+			<see>msg</see>
+		</seealso>
+	</help>

@@ -1,0 +1,41 @@
+#!/bin/sh
+# Copyright (C) 2004 Eggheads Development Team
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# $Id: config.stubs,v 1.4 2005/10/25 19:55:44 stdarg Exp $
+
+files=`find . -name "config*.m4" | \
+        sed 's#\(.*/config\)\(.*\).m4#\20 \1\2.m4#' | \
+        sort | \
+        sed 's#.* ##'`
+                                                                                
+for file in $files; do
+    if [ -r $file ]; then
+
+	if [ "$1" = "--bootstrap" ]; then
+		dir=`echo $file | awk '{ len = split($0, tok, "/"); printf substr($0, 0, length($0) - length(tok[len])); }'`
+		makefiles="$dir/Makefile $makefiles"
+	else
+		echo "m4_include($file)"
+	fi
+
+    fi
+done
+
+if [ "$1" = "--bootstrap" ]; then
+	echo "Generating module Makefile.in's..."
+	$2 $makefiles
+fi;

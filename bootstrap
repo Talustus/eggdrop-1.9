@@ -1,0 +1,72 @@
+#! /bin/sh
+#
+# $Id: bootstrap,v 1.20 2004/10/17 05:14:06 stdarg Exp $
+#
+# Recommended development tools versions:
+#   autoconf 2.59
+#   automake 1.6.3
+#   libtool 1.4.3
+#
+# NOTE:
+#   There are a couple of known bugs in libtool that will be fixed with the
+#   1.4.3 release. Meanwhile you have two options to address the problem:
+#   - create these symlinks in the top dir:
+#       ln -s acconfig/mkinstalldirs ./
+#       ln -s configure.ac configure.in
+#    OR
+#   - apply a patch to libtool 1.4.2.
+#     It is avaliable here:
+#     http://www.techmonkeys.org/~tothwolf/libtool/libtool-1.4.2-auxdir.patch
+#
+# Please note that it may happen that the bootstrap process reports errors.
+# This doesn't necessarily mean that something went wrong. Try if ./configure
+# and make run without any unexpected errors before reporting bugs. And of
+# course make sure you have the tool's versions above installed before
+# bootstrapping the package. If you don't have them, you can alternatively
+# download the prepackaged and already bootstrapped current CVS snapshot (
+# daily resynched) at:
+# ftp://ftp.eggheads.org/pub/eggdrop/source/snapshot/eggdrop1.9-snapshot.tar.gz
+#
+# ITE
+
+###
+### DO NOT ADD --force to libtoolize!
+### It will overwrite config.sub and config.guess with older versions!
+###
+
+ACLOCAL=aclocal
+AUTOMAKE=automake
+
+if [ "$1" != "" ]; then
+	ACLOCAL=$ACLOCAL-$1
+	AUTOMAKE=$AUTOMAKE-$1
+fi
+
+set -x
+
+# Bring gettext files
+#gettextize --copy --force
+
+# Bring in libtool with libtdl abstraction
+libtoolize --ltdl --copy
+
+# Generate aclocal.m4 from acconfig/*.m4 files
+$ACLOCAL -I acconfig -I m4 -I libltdl
+
+# Generate configure script
+autoconf
+
+# Generate config.h.in from configure.in
+autoheader
+
+# Generate Makefile.in from Makefile.am
+$AUTOMAKE --add-missing --copy 
+
+# Generate module Makefile.ins
+acconfig/config.stubs --bootstrap $AUTOMAKE
+
+# Remove previous config.cache
+#if test -f config.cache
+#then
+#  rm -f config.cache
+#fi

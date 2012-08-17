@@ -1,0 +1,88 @@
+$Id: CONTENTS,v 1.9 2003/12/11 01:21:48 wcc Exp $
+
+Directory Contents - /
+Last revised: December 10, 2003
+     _________________________________________________________________
+
+                           Directory Contents - /
+
+  acconfig/
+    This directory contains autotools configuration data.
+
+  doc/
+    Lots of IMPORTANT DOCUMENTATION that you MUST READ is in this directory.
+
+  help/
+    All of the bot's help files are stored here.
+
+  intl/
+    This contains code related to GNU gettext support.
+
+  lib/
+    This contains the libadns, libcompat, libeggdrop, and egglib libraries.
+
+  logs/
+    This is a good place for eggdrop to store log files.
+
+  misc/
+    These are misc. source/script files.
+
+  modules/
+    Eggdrop modules are stored here.
+
+  nettype/
+    Network-specific configuration data is stored here.
+
+  po/
+    This contains translation information.
+
+  scripts/
+    Tcl scripts included with Eggdrop are contained in this directory.
+
+  src/
+    This is the Eggdrop source.
+
+  testcode/
+    This contains Eggdrop test code.
+
+  text/
+    This contains the motd and banner files.
+
+  ABOUT-NLS
+    This contains gettext information.
+
+  AUTHORS
+    A list of Eggdrop developers and contributors is in this file.
+
+  bootstrap
+    This script generates several files needed for the configure process.
+
+  ChangeLog
+    Contains CVS commit logs from each change made to Eggdrop in CVS.
+
+  config.tcl
+    This is a sample Tcl configuration file.
+
+  config.xml
+    This is a sample XML configuration file.
+
+  configure.ac
+    This file is used to generate the configure script.
+
+  COPYING
+    Eggdrop legal information is contained in this file.
+
+  INSTALL
+    Information on installing your Eggdrop.
+
+  Makefile.am
+    This helps with the automated compiling of the bot.
+
+  NEWS
+    This lists significant differences with previous versions.
+
+  README
+    You should read this file before even trying to compile Eggdrop.
+    ________________________________________________________________________
+
+  Copyright (C) 2003, 2004 Eggheads Development Team

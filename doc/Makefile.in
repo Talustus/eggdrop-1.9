@@ -1,0 +1,55 @@
+# Makefile for doc/
+# $Id: Makefile.in,v 1.21 2004/06/22 20:47:38 wcc Exp $
+
+SHELL = @SHELL@
+top_srcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+@SET_MAKE@
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+DOCS = BANS BUG-REPORT CONTENTS MODULES SCRIPTING-COMMANDS
+
+HOWTO_DOCS = CONTENTS FIRST-SCRIPT PATCHING PORTING TIMERS UDEF
+
+SETTING_DOCS = CONTENTS CORE
+
+doofus:
+	@echo ""
+	@echo "Let's try this from the right directory..."
+	@echo ""
+	@cd .. && $(MAKE)
+
+all: $(DOCS)
+
+clean:
+	@rm -f *~
+
+install:
+	@if test ! -d $(DEST)/doc; then \
+		echo "Creating doc/ subdirectory."; \
+		$(top_srcdir)/misc/mkinstalldirs $(DEST)/doc; \
+	fi
+	@if test ! -d $(DEST)/doc/howto; then \
+		$(top_srcdir)/misc/mkinstalldirs $(DEST)/doc/howto; \
+	fi
+	@if test ! -d $(DEST)/doc/settings; then \
+		$(top_srcdir)/misc/mkinstalldirs $(DEST)/doc/settings; \
+	fi
+
+	@echo "Copying docs."
+	@for i in $(DOCS); do \
+		$(INSTALL_DATA) $(srcdir)/$$i $(DEST)/doc/; \
+	done
+	@for i in $(SETTING_DOCS); do \
+		$(INSTALL_DATA) $(srcdir)/settings/$$i $(DEST)/doc/settings/; \
+	done
+	@for i in $(HOWTO_DOCS); do \
+		$(INSTALL_DATA) $(srcdir)/howto/$$i $(DEST)/doc/howto/; \
+	done
+
+#safety hash

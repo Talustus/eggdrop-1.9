@@ -1,0 +1,783 @@
+# eggdrop.pot
+# Copyright (C) 2004 Eggheads Development Team
+# This file is distributed under the same license as the Eggdrop package.
+
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-20 12:15-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/compat/getopt.c:681
+#, c-format
+msgid "%s: option `%s' is ambiguous\n"
+msgstr ""
+
+#: lib/compat/getopt.c:706
+#, c-format
+msgid "%s: option `--%s' doesn't allow an argument\n"
+msgstr ""
+
+#: lib/compat/getopt.c:711
+#, c-format
+msgid "%s: option `%c%s' doesn't allow an argument\n"
+msgstr ""
+
+#: lib/compat/getopt.c:729 lib/compat/getopt.c:902
+#, c-format
+msgid "%s: option `%s' requires an argument\n"
+msgstr ""
+
+#. --option
+#: lib/compat/getopt.c:758
+#, c-format
+msgid "%s: unrecognized option `--%s'\n"
+msgstr ""
+
+#. +option or -option
+#: lib/compat/getopt.c:762
+#, c-format
+msgid "%s: unrecognized option `%c%s'\n"
+msgstr ""
+
+#. 1003.2 specifies the format of this message.
+#: lib/compat/getopt.c:788
+#, c-format
+msgid "%s: illegal option -- %c\n"
+msgstr ""
+
+#: lib/compat/getopt.c:791
+#, c-format
+msgid "%s: invalid option -- %c\n"
+msgstr ""
+
+#. 1003.2 specifies the format of this message.
+#: lib/compat/getopt.c:821 lib/compat/getopt.c:951
+#, c-format
+msgid "%s: option requires an argument -- %c\n"
+msgstr ""
+
+#: lib/compat/getopt.c:868
+#, c-format
+msgid "%s: option `-W %s' is ambiguous\n"
+msgstr ""
+
+#: lib/compat/getopt.c:886
+#, c-format
+msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgstr ""
+
+#: modules/dccparty/dccparty.c:87
+#, c-format
+msgid "Ignoring chat request from %s (user unknown)."
+msgstr ""
+
+#: modules/dccparty/dccparty.c:199
+msgid ""
+"\r\n"
+"Welcome to the dcc partyline interface!\r\n"
+msgstr ""
+
+#: modules/dccparty/dccparty.c:200
+#, c-format
+msgid "Your ident is: %s\r\n"
+msgstr ""
+
+#: modules/dccparty/dccparty.c:201
+#, c-format
+msgid "Your hostname is: %s\r\n"
+msgstr ""
+
+#: modules/javascript/javascript.c:177
+msgid "Don't create your own eggvars!"
+msgstr ""
+
+#: modules/javascript/javascript.c:538
+#, c-format
+msgid "User not found: %s"
+msgstr ""
+
+#: modules/javascript/javascript.c:546
+#, c-format
+msgid "Converting unknown! '%c'"
+msgstr ""
+
+#: modules/javascript/javascript.c:549
+#, c-format
+msgid "Cannot convert JS object to unknown variable type '%s'."
+msgstr ""
+
+#: modules/javascript/javascript.c:639 modules/tclscript/tclscript.c:611
+msgid ""
+"You must be a permanent owner (defined in the config file) to use this "
+"command.\n"
+msgstr ""
+
+#: modules/javascript/javascript.c:644
+msgid "JS Error: unknown for now\n"
+msgstr ""
+
+#: modules/javascript/javascript.c:665
+#, c-format
+msgid "Using JavaScript version %s.\n"
+msgstr ""
+
+#: modules/javascript/javascript.c:669
+#, c-format
+msgid "    Using JavaScript version %s.\n"
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:106
+msgid "*** Disconnecting"
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:162
+msgid "Syntax: <obot> <host> <port> [username] [password]"
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:171
+msgid "Could not get local botname; please specify a username to log in as."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:174
+#, c-format
+msgid "No username specified, using '%s' by default."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:180
+#, c-format
+msgid "Could not create obot '%s'."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:206
+msgid "Syntax: olink <obot>"
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:215
+#, c-format
+msgid "Error: '%s' is not an obot."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:231
+#, c-format
+msgid "Linking to %s (%s %d) on idx %d as %s."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:246
+#, c-format
+msgid "oldbotnet error: password on %s needs to be reset."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:255
+#, c-format
+msgid "Calculating md5 of '%s' + '%s'."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:263
+#, c-format
+msgid "Result: '%s'"
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:275
+msgid "oldbotnet error: password was rejected."
+msgstr ""
+
+#: modules/oldbotnet/oldbotnet.c:406
+#, c-format
+msgid "eof from %s (%s)."
+msgstr ""
+
+#: modules/perlscript/mod_iface.c:37
+#, c-format
+msgid "Perl error: %s"
+msgstr ""
+
+#: modules/perlscript/mod_iface.c:48
+msgid "Sorry, you must be a permanent owner to use this command."
+msgstr ""
+
+#: modules/perlscript/mod_iface.c:53
+msgid "Syntax: .perl <perlexpression>"
+msgstr ""
+
+#: modules/server/input.c:244
+#, c-format
+msgid "Action: %s %s"
+msgstr ""
+
+#: modules/server/input.c:411
+#, c-format
+msgid "NICK IS INVALID: %s (keeping '%s')."
+msgstr ""
+
+#: modules/server/input.c:414
+#, c-format
+msgid "Server says my nickname ('%s') is invalid, trying new random nick."
+msgstr ""
+
+#. We are online and have a nickname, we'll keep it
+#: modules/server/input.c:430
+#, c-format
+msgid "Nick is in use: '%s' (keeping '%s')."
+msgstr ""
+
+#: modules/server/input.c:433
+#, c-format
+msgid "Nick is in use: '%s' (trying next one)."
+msgstr ""
+
+#: modules/server/input.c:446
+#, c-format
+msgid "Cannot change to banned nickname (%s on %s)."
+msgstr ""
+
+#: modules/server/input.c:456
+#, c-format
+msgid "Can't change nickname to %s. Is my nickname banned?"
+msgstr ""
+
+#: modules/server/input.c:469
+msgid "Nick change was too fast."
+msgstr ""
+
+#. Usually if we get this then we really messed up somewhere
+#. * or this is a non-standard server, so we log it and kill the socket
+#. * hoping the next server will work :) -poptix
+#.
+#: modules/server/input.c:479
+#, c-format
+msgid "%s says I'm not registered, trying next one."
+msgstr ""
+
+#: modules/server/input.c:480
+msgid "The server says I'm not registered, trying next one."
+msgstr ""
+
+#: modules/server/input.c:502
+msgid "Disconnecting from server."
+msgstr ""
+
+#: modules/server/input.c:503
+msgid "disconnecting due to error"
+msgstr ""
+
+#: modules/server/input.c:535
+#, c-format
+msgid "Connected to %s as %s!%s@%s."
+msgstr ""
+
+#: modules/server/nicklist.c:37
+#, c-format
+msgid "Using random nick because %s."
+msgstr ""
+
+#: modules/server/nicklist.c:37
+msgid "none of the defined nicks are valid"
+msgstr ""
+
+#: modules/server/nicklist.c:37
+msgid "there are no nicks defined"
+msgstr ""
+
+#: modules/server/party_commands.c:30
+msgid "The server list is empty."
+msgstr ""
+
+#: modules/server/party_commands.c:31
+#, c-format
+msgid "%d server%s:"
+msgstr ""
+
+#: modules/server/party_commands.c:33
+#, c-format
+msgid "   %s (port %d)%s"
+msgstr ""
+
+#: modules/server/party_commands.c:33 modules/server/party_commands.c:34
+msgid " (password set)"
+msgstr ""
+
+#: modules/server/party_commands.c:34
+#, c-format
+msgid "   %s (default port)%s"
+msgstr ""
+
+#: modules/server/party_commands.c:68
+msgid "Syntax: +server <host> [port] [pass]"
+msgstr ""
+
+#: modules/server/party_commands.c:73
+msgid "Please specify a valid host."
+msgstr ""
+
+#: modules/server/party_commands.c:78 modules/server/party_commands.c:124
+#, c-format
+msgid "Added %s/%d.\n"
+msgstr ""
+
+#: modules/server/party_commands.c:89
+msgid "Syntax: -server <host> [port] [pass]"
+msgstr ""
+
+#: modules/server/party_commands.c:96
+msgid "No matching servers."
+msgstr ""
+
+#: modules/server/party_commands.c:99
+#, c-format
+msgid "Deleted server %d."
+msgstr ""
+
+#: modules/server/party_commands.c:107
+msgid "Syntax: dump <server stuff>"
+msgstr ""
+
+#: modules/server/party_commands.c:142
+#, c-format
+msgid "Syntax: %s <nick/chan> <message>"
+msgstr ""
+
+#: modules/server/party_commands.c:147
+#, c-format
+msgid "Msg to %1$s: %2$s"
+msgstr ""
+
+#: modules/server/party_commands.c:159
+msgid "Syntax: act <nick/chan> <action>"
+msgstr ""
+
+#: modules/server/party_commands.c:164
+#, c-format
+msgid "Action to %1$s: %2$s"
+msgstr ""
+
+#: modules/server/server.c:95
+#, c-format
+msgid "   Connecting to server %s/%d."
+msgstr ""
+
+#: modules/server/server.c:96
+#, c-format
+msgid "   Connecting to next server in %d seconds."
+msgstr ""
+
+#. First line, who we've connected to.
+#: modules/server/server.c:100
+#, c-format
+msgid "   Connected to %s/%d."
+msgstr ""
+
+#: modules/server/server.c:104
+#, c-format
+msgid "   Online as %s!%s@%s (%s)."
+msgstr ""
+
+#: modules/server/server.c:105
+#, c-format
+msgid "   Online as %s (still waiting for WHOIS result)."
+msgstr ""
+
+#: modules/server/server.c:107
+msgid "   Still logging in."
+msgstr ""
+
+#: modules/server/server.c:159
+msgid "server module unloading"
+msgstr ""
+
+#: modules/server/servsock.c:51
+msgid "Error connecting to next server: no servers are defined!"
+msgstr ""
+
+#: modules/server/servsock.c:64
+#, c-format
+msgid "Connecting to %s (%d)."
+msgstr ""
+
+#: modules/server/servsock.c:67
+msgid "Error connecting to server."
+msgstr ""
+
+#: modules/server/servsock.c:139
+#, c-format
+msgid "Connected to %s, logging in."
+msgstr ""
+
+#: modules/tclscript/tclscript.c:110
+#, c-format
+msgid "Failed to load script %s: %s"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:219
+#, c-format
+msgid "Error opening Tcl error log (%s)!"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:554
+msgid "Cannot convert Tcl object to unknown variable type '"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:616
+msgid "Syntax: .tcl <tclexpression>"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:623
+#, c-format
+msgid ""
+"Tcl error: %s\n"
+"\n"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:627
+#, c-format
+msgid ""
+"Tcl: %s\n"
+"\n"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:709
+#, c-format
+msgid "Using Tcl version %d.%d (by header).\n"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:713
+#, c-format
+msgid "    Using Tcl version %d.%d (by header).\n"
+msgstr ""
+
+#: modules/tclscript/tclscript.c:714
+#, c-format
+msgid ""
+"return \"    Library: [info library]\\n    Reported version: [info "
+"tclversion]\\n    Reported patchlevel: [info patchlevel]\""
+msgstr ""
+
+#: src/core_party.c:51
+msgid "Syntax: join <channel>"
+msgstr ""
+
+#: src/core_party.c:89
+msgid "Syntax: whisper <partylineuser> <msg>"
+msgstr ""
+
+#: src/core_party.c:95
+#, c-format
+msgid "No such user '%s'."
+msgstr ""
+
+#: src/core_party.c:111
+msgid "That setting does not exist."
+msgstr ""
+
+#: src/core_party.c:121
+msgid "Syntax: get <path>"
+msgstr ""
+
+#: src/core_party.c:130
+msgid "Current value: null (unset)"
+msgstr ""
+
+#: src/core_party.c:142
+msgid "Syntax: set <path> [new value]"
+msgstr ""
+
+#: src/core_party.c:155 src/core_party.c:177
+#, c-format
+msgid "Old value: '%s'"
+msgstr ""
+
+#: src/core_party.c:158 src/core_party.c:181
+#, c-format
+msgid "New value: '%s'"
+msgstr ""
+
+#: src/core_party.c:159 src/core_party.c:182
+msgid "New value: null (unset)"
+msgstr ""
+
+#: src/core_party.c:169
+msgid "Syntax: unset <path>"
+msgstr ""
+
+#: src/core_party.c:178
+msgid "Old value: null (unset)"
+msgstr ""
+
+#: src/core_party.c:192
+#, c-format
+msgid "I am %1$s, running Eggdrop %2$s."
+msgstr ""
+
+#: src/core_party.c:193
+#, c-format
+msgid "Owner: %s"
+msgstr ""
+
+#: src/core_party.c:194
+#, c-format
+msgid "Admin: %s"
+msgstr ""
+
+#: src/core_party.c:196
+#, c-format
+msgid "OS: %1$s %2$s"
+msgstr ""
+
+#: src/core_party.c:198
+#, c-format
+msgid "Help path: %s (%d entries, %d sections)"
+msgstr ""
+
+#: src/core_party.c:207 src/main.c:477
+msgid "Saving user file..."
+msgstr ""
+
+#: src/core_party.c:209 src/main.c:480
+msgid "Saving config file..."
+msgstr ""
+
+#: src/core_party.c:217
+msgid "Please use at least 6 characters."
+msgstr ""
+
+#: src/core_party.c:221
+#, c-format
+msgid "Changed password to '%s'."
+msgstr ""
+
+#: src/core_party.c:235
+msgid "Partyline members:"
+msgstr ""
+
+#: src/core_party.c:327
+msgid "Syntax: +user <handle>"
+msgstr ""
+
+#: src/core_party.c:331
+#, c-format
+msgid "User '%s' already exists!"
+msgstr ""
+
+#: src/core_party.c:335
+#, c-format
+msgid "User '%s' created."
+msgstr ""
+
+#: src/core_party.c:336
+#, c-format
+msgid "Could not create user '%s'."
+msgstr ""
+
+#: src/core_party.c:345
+msgid "Syntax: -user <handle>"
+msgstr ""
+
+#: src/core_party.c:349 src/core_party.c:374 src/core_party.c:412
+#, c-format
+msgid "User '%s' not found."
+msgstr ""
+
+#: src/core_party.c:351
+#, c-format
+msgid "Deleting user '%s'."
+msgstr ""
+
+#: src/core_party.c:364
+msgid "Syntax: +host [handle] <host>"
+msgstr ""
+
+#: src/core_party.c:381
+msgid "Only valid users can add hosts."
+msgstr ""
+
+#: src/core_party.c:386
+#, c-format
+msgid "Added '%1$s' to user '%2$s'."
+msgstr ""
+
+#: src/core_party.c:402
+msgid "Syntax: -host [handle] <host>"
+msgstr ""
+
+#: src/core_party.c:419
+msgid "Only valid users can remove hosts."
+msgstr ""
+
+#: src/core_party.c:424
+#, c-format
+msgid "Mask '%1$s' not found for user '%2$s'."
+msgstr ""
+
+#: src/core_party.c:427
+#, c-format
+msgid "Removed '%1$s' from user '%2$s'."
+msgstr ""
+
+#: src/core_party.c:450
+msgid "Syntax: chattr <handle> [channel] <+/-flags>"
+msgstr ""
+
+#: src/core_party.c:462
+#, c-format
+msgid "Flags for %s are now '%s'."
+msgstr ""
+
+#: src/core_party.c:464
+#, c-format
+msgid "'%s' is not a valid user."
+msgstr ""
+
+#: src/core_party.c:489
+msgid "Loaded modules:"
+msgstr ""
+
+#: src/core_party.c:499
+msgid "Syntax: loadmod <module name>"
+msgstr ""
+
+#: src/core_party.c:504
+#, c-format
+msgid "Module '%s' loaded successfully."
+msgstr ""
+
+#: src/core_party.c:507
+#, c-format
+msgid "Module '%s' is already loaded."
+msgstr ""
+
+#: src/core_party.c:510
+#, c-format
+msgid "Module '%s' could not be loaded."
+msgstr ""
+
+#: src/core_party.c:513
+#, c-format
+msgid ""
+"Module '%s' does not have a valid initialization function. Perhaps it is not "
+"an eggdrop module?"
+msgstr ""
+
+#: src/core_party.c:522
+msgid "Syntax: unloadmod <module name>"
+msgstr ""
+
+#: src/core_party.c:527
+#, c-format
+msgid "Module '%s' unloaded successfully."
+msgstr ""
+
+#: src/core_party.c:530
+#, c-format
+msgid "Module '%s' is not loaded."
+msgstr ""
+
+#: src/core_party.c:533
+#, c-format
+msgid ""
+"Module '%s' has dependencies that are still loaded. You must unload them "
+"first."
+msgstr ""
+
+#: src/core_party.c:536
+#, c-format
+msgid "Module '%s' refuses to be unloaded by you!"
+msgstr ""
+
+#: src/core_party.c:548
+msgid "TABLE"
+msgstr ""
+
+#: src/core_party.c:548
+msgid "SYNTAX"
+msgstr ""
+
+#: src/core_party.c:549
+msgid "FUNCTION"
+msgstr ""
+
+#: src/core_party.c:549
+msgid "MASK"
+msgstr ""
+
+#: src/core_party.c:549
+msgid "FLAGS"
+msgstr ""
+
+#: src/core_party.c:549
+msgid "HITS"
+msgstr ""
+
+#: src/logfile.c:126
+msgid "Cycling logfiles..."
+msgstr ""
+
+#: src/logfile.c:226 src/logfile.c:285
+#, c-format
+msgid "Last message repeated %d time(s).\n"
+msgstr ""
+
+#. It's too big.
+#: src/logfile.c:271
+#, c-format
+msgid "Cycling logfile %s: over max-logsize (%d kilobytes)."
+msgstr ""
+
+#: src/main.c:149
+msgid "Received TERM signal (ignoring)."
+msgstr ""
+
+#: src/main.c:155
+msgid "Received QUIT signal (ignoring)."
+msgstr ""
+
+#: src/main.c:162
+msgid "Received HUP signal (ignoring)."
+msgstr ""
+
+#: src/main.c:170
+msgid "Received ILL signal (ignoring)."
+msgstr ""
+
+#: src/main.c:183
+#, c-format
+msgid ""
+"\n"
+"Usage: %s [OPTIONS]... [FILE]\n"
+msgstr ""
+
+#: src/main.c:184
+#, c-format
+msgid ""
+"\n"
+"  -h, --help                 Print help and exit\n"
+"  -v, --version              Print version and exit\n"
+"  -n, --foreground           Don't go into the background (default=off)\n"
+"  -c  --channel-stats        (with -n) Display channel stats every 10 "
+"seconds\n"
+"  -t  --terminal             (with -n) Use terminal to simulate dcc-chat\n"
+"  -m  --make-userfile        Userfile creation mode\n"
+"  FILE  optional config filename (default 'config.xml')\n"
+msgstr ""
+
+#. bug: option not considered.
+#: src/main.c:245
+#, c-format
+msgid "%s: option unknown: %c\n"
+msgstr ""
+
+#: src/main.c:280
+#, c-format
+msgid "Warning: timer drift (%d minutes)."
+msgstr ""
+
+#: src/main.c:699
+msgid "No reason"
+msgstr ""

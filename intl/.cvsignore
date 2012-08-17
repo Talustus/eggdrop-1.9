@@ -1,0 +1,10 @@
+Makefile
+libintl.h
+*.o
+*.obj
+*.a
+*.la
+*.so
+*.dll
+.deps
+.libs

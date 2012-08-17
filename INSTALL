@@ -1,0 +1,53 @@
+$Id: INSTALL,v 1.17 2004/06/20 21:33:27 wingman Exp $
+
+Compilation and Installation of Eggdrop
+Last revised: December 10, 2003
+     _________________________________________________________________
+
+                  Compilation and Installation of Eggdrop
+
+
+  This is the quick install guide; if you have had little or no experience
+  with UNIX or Eggdrop, READ THE README FILE NOW! This file is only for
+  experienced users.
+
+  Contents:
+    1. What is Eggdrop?
+    2. Compiling Eggdrop 1.9
+
+
+  (1) WHAT IS EGGDROP?
+
+    Please, read the README file before attempting to set up this bot. This
+    file is a quick setup guide, not a miracle worker. If you enter this file
+    without basic Eggdrop knowledge, you will NOT leave with a working bot!
+    Before asking ANY questions, READ THE README FILE OR YOU WILL BE BURNED
+    TO A HORRIBLE DEATH! IF YOU DO NOT READ THAT FILE I WILL PERSONALLY WALK
+    TO YOUR TERMINAL AND BEAT IT WITH A SMELLY SNEAKER! By the way, read the
+    README file.
+
+  (2) COMPILING EGGDROP 1.9
+
+    The build process will be simplified at a later time. For now, the basic
+    steps to compiling Eggdrop 1.9 are as follows.
+
+      1. Install the following development tools on your system:
+           autoconf 2.52
+           automake 1.5
+           libtool  1.4.2
+
+      2. Create the following symlinks in the Eggdrop 1.9 root directory:
+           ln -s acconfig/mkinstalldirs ./
+           ln -s configure.ac configure.in
+
+      3. Run './bootstrap'.
+
+      4. Run './configure --prefix=<install path>'.
+
+      5. Run 'make'.
+
+      6. Run 'make install'.
+  ________________________________________________________________________
+
+Copyright (C) 1997 Robey Pointer
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eggheads Development Team

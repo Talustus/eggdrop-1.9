@@ -1,0 +1,390 @@
+$Id: SCRIPTING-COMMANDS,v 1.11 2004/06/24 06:19:56 wcc Exp $
+
+Eggdrop Scripting Commands
+Last revised: July 22, 2004
+     _________________________________________________________________
+
+                        Eggdrop Scripting Commands
+
+
+This is an exhaustive list of all of the scripting commands added to Eggdrop.
+All of the normal built-in commands specific to the scripting module you are
+using are still there, of course, but you can also use these to manipulate
+features of the bot. They are listed according to category. This list is
+accurate for Eggdrop v1.9.0.
+
+Unless otherwise specified, commands return 0.
+
+*** CORE COMMANDS ***
+
+  putlog <text>
+    Description: sends text to the bot's logfile, marked as 'misc' (o)
+    Returns: nothing
+    Module: core
+
+  putloglev <level(s)> <channel> <text>
+    Description: sends text to the bot's logfile, tagged with all of the
+      valid levels given. Use "*" to indicate all log levels.
+    Returns: nothing
+    Module: core
+
+  <DXX: SCRIPTING-COMMANDS docs for the core.>
+
+
+*** SERVER MODULE COMMANDS ***
+
+Channel Commands:
+
+  channel_list
+    Returns:
+      The list of channels that the bot is currently on.
+
+  channel_members <chan>
+    Returns:
+      The list of nicks on the given channel.
+
+  channel_mode <chan> [nick]
+    Returns:
+      Either the mode of the channel, with no arguments (such as key),
+      or the mode of the nick on that channel (if given).
+
+  channel_mask_list <chan> <type>
+    Returns:
+      The list of bans, exempts, or invites in the channel. Each item of the
+      list is itself a list of the form {mask, who_set_it, when_it_was_set}.
+
+  channel_key <chan>
+    Returns:
+      The key of the given channel.
+
+  channel_limit <chan>
+    Returns:
+      The limit of the given channel.
+
+  channel_topic <chan>
+    Returns:
+      The topic, nick that set the topic, and time the topic was set for the
+      specified channel.
+
+
+
+Botnick Commands:
+
+  nick_add <nick>
+    Description:
+      Adds a nick to the bot's list of nicks. If the first nick in the list
+      cannot be used, the next nick will be used. If all nicks cannot be used,
+      a random nick starting with "egg" will be used.
+
+  nick_del <nick number>
+    Description:
+      Removes a nick from the bot's list of nicks.
+    Returns:
+      0 for success; -1 otherwise.
+
+  nick_clear
+    Description:
+      Clears the bot's list of nicks.
+
+  nick_find <nick>
+    Returns:
+      The nick number corresponding to the specified nick, or -1 if not found.
+
+  isbotnick <nick>
+    Returns:
+      1 if the specified nick matches the bot's current nick; 0 otherwise.
+
+
+
+DCC Commands:
+
+  dcc_chat <nick> [timeout]
+    Description:
+      Starts a dcc chat with the specified nick. Timeout is specified in
+      seconds. Specify 0 to use the default timeout, or -1 for no timeout.
+    Returns:
+      An unconnected idx, or -1 on failure.
+
+  dcc_send <nick> <filename> [timeout]
+    Description:
+      Starts a dcc send to the given nick. Resumes are handled automatically.
+      Timeout is specified in seconds. Specify 0 to use the default timeout,
+      or -1 for no timeout.
+    Returns:
+      An unconnected idx, -2 if the file could not be opened, or -1 on other
+      failure.
+
+  dcc_send_info <idx> <stat-type>
+    Returns:
+      Information about a DCC send. <stat-type> may be one of:
+
+        connect_time - The time the DCC send connection was actually
+                       established.
+        request_time - The (unixtime) time the DCC send was initiated
+                       or accepted.
+        bytes_left   - The number of bytes remaining to be sent.
+        bytes_sent   - The number of bytes already sent.
+        total_cps    - The average CPS (Characters Per Second) since the send
+                       began.
+        snapshot_cps - The average CPS (Characters Per Second) over the last
+                       several seconds.
+
+  dcc_accept_send <nick> <localfile> <remotefile> <size> <resume> <ip> <port> [timeout]
+    Description:
+      Accepts a dcc send, as triggered by the dcc_recv bind. Timeout is specified
+      in seconds. Specify 0 to use the default timeout, or -1 for no timeout.
+    Returns:
+      An unconnected idx, or -1 on failure.
+
+
+
+Input / Output Commands:
+
+  putserv [queue] [next] <text>
+    Description:
+      Sends text to the IRC server.
+
+      Queue may be one of:
+
+        normal  - Messages are sent at a normal rate.
+        fast    - Messages are sent at a rate faster than "normal".
+        slow    - Messages are sent at a rate slower than "normal".
+        noqueue - Messages are not queued. They are sent out to the server
+                  immediatly. WARNING: The bot can flood off easily when
+                  using this mode.
+
+      If "next" is specified, the message will be moved to the front of the
+      queue.
+
+  server_fake_input <text>
+    Description:
+      Causes the server module to interpret the given text as if the server
+      had sent it.
+
+
+
+Server List Commands:
+
+  server_add <host> [port] [password]
+    Description:
+      Adds a server to the server list.
+
+  server_del <server number>
+    Description:
+      Removes a server from the server list.
+    Returns:
+      0 for success; -1 otherwise.
+
+  server_clear
+    Description:
+      Clears the server list.
+
+  server_find <host> [port] [password]
+    Returns:
+      The server number matching the server details specified. -1 will be
+      returned if the server could not be found in the list.
+
+  jump [server number]
+    Description:
+      Jumps the bot to the server corresponding to the given server number.
+      If no server number is specified, the next server in the list will be
+      used.
+
+
+
+005 Commands:
+
+  server_support_val <field>
+    Description:
+      Provides an interface to the 005 numeric.
+    Returns:
+      The value of the field (parsed from fieldname=fieldvalue). Use
+      server_supports instead for items with no value.
+
+  server_supports <value>
+    Description:
+      Provides an interface to the 005 numeric for items with no value.
+    Returns:
+      1 if the value is supported by the server; 0 otherwise.
+
+
+
+Queue Commands:
+
+  server_queue_len <queue> [next]
+    Returns:
+      The number of messages in the given queue. [queue] may be one of: "fast",
+      "slow", or "normal". If "next" is specified, only messages with the "next"
+      flag (as with putserv [queue] next) are counted.
+
+  server_queue_get [queue] [next] <msgnum>
+    Description:
+      Allows scripts to read the server's output queues. Messages start at
+      number 0. If [queue] isn't given, the normal queue is assumed. If the
+      message was queued with the "next" flag, then then "next" flag must be
+      used to retrieve it.
+    Returns:
+      The text of the desired message; or nothing if not found.
+
+  server_queue_set [queue] [next] <msgnum> <msg>
+    Description:
+      Allows scripts to overwrite messages in the server's output queues.
+      [queue] and [next] work exactly as with server_queue_get and
+      server_queue_set.
+    Returns:
+      0 on success; -1 otherwise.
+
+  server_queue_insert [queue] [next] <msgnum> <msg>
+    Description:
+      Inserts messages into the given output queue. The message that was
+      previously at <msgnum> will be moved back in the queue. To add a message
+      to the end, make <msgnum> larger than the current queue length. Or use
+      putserv :)
+
+
+
+Misc Server Commands:
+
+  get_uhost <nick>
+    Returns:
+      The uhost for the given nick, or "" if unknown.
+
+  irccmp <str1> <str2>
+    Description:
+      Compares str1 and str2 case independently, as specified by the current
+      server's method of string comparison. Typical uses are comparing nicks
+      and channel names.
+    Returns:
+      < 0 if str1 < str2
+      = 0 if str1 = str2
+      > 0 if str1 > str2
+
+
+
+*** SCRIPT MODULE COMMANDS ***
+
+  <WRITE ME>
+
+
+
+*** GLOBAL VARIABLES ***
+
+  botnick
+    Value: the current nickname the bot is using on IRC
+    Module: server
+
+  server
+    Value: the server list index of the current server the bot is using
+    Module: server
+
+  servidx
+    Value: the idx of the server socket
+    Module: server
+
+  <FINISH ME>
+
+
+*** BINDS ***
+
+  <WRITE ME>
+
+*** NETWORK COMMANDS ***
+
+  net_listen <port>
+    Description: Opens a listening port. If <port> is in use, it will try up to
+      20 higher ports until a free one is found.
+    Returns: A list of 2 items: The new idx, and the real port being used.
+    Notes: When an incoming connection is accepted, the "newclient" event will
+      execute.
+
+  net_open <host> <port> [timeout]
+    Description: Opens an async connection to the given host and port. If
+      'host' is not an ip address, a dns lookup is performed without blocking.
+      The 'timeout' optional parameter lets you specify a connection timeout
+      in milliseconds. If not given, or if the value is 0, then eggdrop's
+      default timeout value is used. If given as -1, no timeout is used.
+    Returns: A valid idx in an unconnected state.
+    Notes: When the connection is established, the "connect" event will
+      execute. If there is a dns error, a connection error, or the timeout
+      elapses, the "eof" event will execute with the appropriate error code.
+      Use the net_handler command to set handlers for these events.
+
+  net_close <idx>
+    Description: Close the given idx.
+    Returns: 0 for success, -1 if the idx is invalid or already closed.
+
+  net_write <idx> <text> [len]
+    Description: Writes data to an idx.
+    Returns: The number of bytes written to the actual network interface, or
+      -1 upon error.
+    Notes: Any unwritten data is buffered and will be written as soon as
+      possible. Use the 'len' parameter if you are writing binary data which
+      contains embedded NULL's, otherwise the C strlen() function is used to
+      determined the number of bytes to write.
+
+  net_handler <idx> <event> [callback]
+    Description: Sets or unsets a callback for a particular event on an idx.
+      The syntax of the callback varies with the event:
+      connect_callback <idx> <peer_ip> <peer_port>
+        Called when the idx establishes an outgoing connection.
+      newclient_callback <idx> <newidx> <peer_ip> <peer_port>
+        Called when an incoming connection is established.
+      eof_callback <idx> <err> <errmsg>
+        Called when eof is detected or there is an error, such as when the
+        connection times out or is refused by the host.
+      read_callback <idx> <data> <len>
+        Called when data is ready on the idx, after any filtering has been
+        performed. (For more information, see net_linemode.)
+      written_callback <idx> <len> <remaining_len>
+        Called when buffered data has been written in the background.
+      delete_callback <idx>
+        Called when the idx is deleted.
+    Returns: 0 for success, -1 for an invalid idx, -2 for an invalid event type.
+    Notes: To unset a handler, leave off the 'callback' parameter.
+
+  net_info <idx> <what>
+    Description: Provides statistics on a given idx. Possible values for 'what'
+      are:
+      bytesleft - number of buffered bytes remaining to be written
+
+  net_linemode <idx> <on-off>
+    Description: Sets line buffering to either on (1) or off (0) for an idx.
+      When linemode is on, data is buffered until a full line is read. If more
+      than one line is read, the "read" event is triggered for each individual
+      line. The line is passed to the read handler with the end-of-line (either
+      CR, LF, or CRLF) stripped from the data.
+    Returns: Nothing.
+
+  net_throttle <idx> <speed-in> <speed-out>
+    Description: Turn on speed throttling. The values given are in bytes per
+      second.
+    Returns: Nothing.
+    Notes: A speed parameter of <= 0 will disable throttling for that direction.
+
+  net_throttle_in <idx> <speed-in>
+    Description: Modify the 'speed-in' parameter of an already-throttled idx.
+    Returns: Nothing.
+    Notes: A 'speed-in' of <= 0 will disable input throttling.
+
+  net_throttle_out <idx> <speed-out>
+    Description: Modify the 'speed-out' parameter of an already-throttled idx.
+    Returns: Nothing.
+    Notes: A 'speed-out' of <= 0 will disable output throttling.
+
+  net_throttle_off <idx>
+    Description: Removes throttling from an idx.
+
+*** TCL ONLY ***
+
+  net_add_tcl <channel>
+    Description: Adds a tcl channel to eggdrop's event loop so that its events
+      can be serviced quickly.
+    Returns: Nothing.
+
+  net_rem_tcl <channel>
+    Description: Removes a previously added tcl channel from eggdrop's event
+      loop.
+    Returns: Nothing.
+       _________________________________________________________________
+
+   Copyright (C) 2002, 2003, 2004 Eggheads Development Team

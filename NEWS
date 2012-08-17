@@ -1,0 +1,31 @@
+$Id: NEWS,v 1.20 2004/06/20 21:33:27 wingman Exp $
+
+News
+Last revised: December 10, 2003
+     _________________________________________________________________
+
+                                   News
+
+
+  What's new? First, read the following documents:
+
+    INSTALL
+    README
+    doc/BOTNET
+
+<WILL BE COMPLETED AT A LATER TIME>
+
+  If you are upgrading from a pre-1.9 version of Eggdrop:
+
+    1. Before you start the bot for the first time, BACKUP your userfile.
+
+    2. DON'T USE YOUR OLD CONFIG FILE. MAKE A NEW ONE!
+
+     _________________________________________________________________
+
+
+<WILL BE COMPLETED AT A LATER TIME>
+  ________________________________________________________________________
+
+Copyright (C) 1997 Robey Pointer
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Eggheads Development Team
